@@ -17,7 +17,7 @@ if (isset($_POST['login'])) {
     $password = $mysqli->real_escape_string($_POST['password']);
 
     // Check if user exists in database
-    $sql = "SELECT * FROM login WHERE username='$username'";
+    $sql = "SELECT * FROM data WHERE username='$username'";
     $result = $mysqli->query($sql);
 
     if ($result->num_rows == 1) {

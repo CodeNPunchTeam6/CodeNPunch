@@ -5,13 +5,42 @@
     </head>
     <body>
         <h2>Register</h2>
-        <form action="register.php" method="post">
-            <label>Username:</label><br>
-            <input type="text" name="username" required><br>
-            <label>Password:</label><br>
-            <input type="password" name="password" required><br><br>
+        <form onsubmit="return validateForm()" action="register.php" method="post">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br>
+            <label for="fullname">Full Name:</label><br>
+            <input type="text" id="fullname" name="fullname" required><br>
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email" required><br>
+            <label for="phonenumber">Phone Number:</label><br>
+            <input type="text" id="phonenumber" name="phonenumber" required><br>
+            <label>You are:</label><br>
+            <select name="role" id="role">
+                <option value=1>Teacher</option>
+                <option value=0>Student</option>
+            </select><br><br>
             <button type="submit" name="register">Register</button><br><br>
+            
             <p>Already have an account? <a href="login.html">Login</a>.</p>
         </form>
+        <script>
+            function validateForm() {
+                var username = document.getElementById("username").value;
+                var password = document.getElementById("password").value;
+                var fullname = document.getElementById("fullname").value;
+                var email = document.getElementById("email").value;
+                var phonenumber = document.getElementById("phonenumber").value;
+
+                if (username == "" || password == "" || fullname == "" || email == "" || phonenumber == "") {
+                    // Show error message if any field is empty
+                    document.getElementById("error-message").style.display = "block";
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        </script>
     </body>
 </html>
