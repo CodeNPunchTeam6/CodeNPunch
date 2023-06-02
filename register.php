@@ -1,5 +1,11 @@
 <?php
+
+
+//check connect
 include "config.php";
+
+//html contents
+echo file_get_contents('./HTMLfile/register.html');
 // Connect to MySQL
 $mysqli = new mysqli($host, $username, $passworddb, $dbname);
 
@@ -16,7 +22,7 @@ if (isset($_POST['register'])) {
     //check valid email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         //invalid email
-        echo '<script> window.location.href = "register.html";alert("Failed, invalid Email!!")</script>';
+        echo '<script> window.location.href = "register.php";alert("Failed, invalid Email!!")</script>';
         $mysqli->close();
     }
 
@@ -24,9 +30,9 @@ if (isset($_POST['register'])) {
     $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
 
     if ($mysqli->query($sql) === TRUE) {
-        echo '<script> window.location.href = "register.html";alert("Success")</script>';
+        echo '<script> window.location.href = "register.php";alert("Success")</script>';
     } else {
-        echo '<script> window.location.href = "register.html";alert("Failed")</script>';
+        echo '<script> window.location.href = "register.php";alert("Failed")</script>';
     }
 }
 

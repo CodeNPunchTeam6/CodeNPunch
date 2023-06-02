@@ -1,7 +1,14 @@
 <?php
 
+//html contents
+echo file_get_contents('./HTMLfile/login.html');
+
+
+
 //check connection
 include "config.php";
+
+
 
 // Start session
 session_start();
@@ -27,13 +34,13 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $row['password'])) {
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $username;
-            header("location: homepage.html");
+            header("location: home.php");
         } else {
-            echo '<script> window.location.href = "login.html";alert("Incorrect")</script>';
+            echo '<script> window.location.href = "login.php";alert("Incorrect")</script>';
            
         }
     } else {
-         echo '<script> window.location.href = "login.html";alert("Invalid")</script>';
+         echo '<script> window.location.href = "login.php";alert("Invalid")</script>';
     }
 }
 
