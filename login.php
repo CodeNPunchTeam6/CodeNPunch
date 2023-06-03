@@ -36,11 +36,10 @@ if (isset($_POST['login'])) {
             $_SESSION['username'] = $username;
             header("location: home.php");
         } else {
-            echo '<script> window.location.href = "login.php";alert("Incorrect")</script>';
-           
+            echo'Incorrect username or password';
         }
     } else {
-         echo '<script> window.location.href = "login.php";alert("Invalid")</script>';
+        echo'Invalid username';
     }
 }
 
