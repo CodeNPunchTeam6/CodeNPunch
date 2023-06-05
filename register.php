@@ -12,10 +12,10 @@ if (isset($_POST['register'])) {
     // Escape special characters in username and password
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $_POST['password'];
-    $fullname = $_POST['fullname'];
+    $fullname = $mysqli->real_escape_string($_POST['fullname']);
     $email = $_POST['email'];
     $phonenumber = $mysqli->real_escape_string($_POST['phonenumber']);
-    $role = (bool) $_POST['role'];
+    $role = $_POST['role'];
     $id = 0;
     
     // generate id for student table
@@ -81,10 +81,10 @@ if (isset($_POST['register'])) {
     if ($role == 0) {
         $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
         $mysqli->query($sql);
-        $sql = "INSERT INTO student (id, fullname, email, phonenumber) VALUES ('$new_id', '$fullname', '$email', '$phonenumber')";
+        $sql = "INSERT INTO student (id, name, email, phonenumber) VALUES ('$new_id', '$fullname', '$email', '$phonenumber')";
     } else {
         // Insert user info into database
-        $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role, id) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
+        $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
     }
 
     if ($mysqli->query($sql) === TRUE) {
