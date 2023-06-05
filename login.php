@@ -23,6 +23,7 @@ if (isset($_POST['login'])) {
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $mysqli->real_escape_string($_POST['password']);
 
+
     // Check if user exists in database
     $sql = "SELECT * FROM data WHERE username='$username'";
     $result = $mysqli->query($sql);
@@ -34,7 +35,10 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $row['password'])) {
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $username;
+            $_SESSION['role'] = $row['role'];
+            session_write_close();
             header("location: home.php");
+            
         } else {
             echo'Incorrect username or password';
         }

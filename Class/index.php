@@ -1,114 +1,94 @@
-<?php
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-// Connect to the database
-//check connect
-include "../config.php";
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-
-// Function to add a new student to the database
-function addStudent($name, $email) {
-    global $conn;
-
-    $sql = "INSERT INTO student (name, email) VALUES ('$name', '$email')";
-
-    if (mysqli_query($conn, $sql)) {
-        echo "New student added successfully<br>";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-}
-
-// Function to edit an existing student in the database
-function editStudent($id, $name, $email) {
-    global $conn;
-
-    $sql = "UPDATE student SET name='$name', email='$email' WHERE id=$id";
-
-    if (mysqli_query($conn, $sql)) {
-        echo "Student details updated successfully<br>";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-}
-
-// Function to remove a student from the database
-function removeStudent($id) {
-    global $conn;
-
-    $sql = "DELETE FROM student WHERE id=$id";
-
-    if (mysqli_query($conn, $sql)) {
-        echo "Student removed successfully<br>";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-}
-
-// Handle form submissions
-if (isset($_POST['submit'])) {
-    $action = $_POST['action'];
-
-    if ($action == 'add') {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-
-        addStudent($name, $email);
-    } elseif ($action == 'edit') {
-        $id = $_POST['id'];
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-
-        editStudent($id, $name, $email);
-    } elseif ($action == 'remove') {
-        $id = $_POST['id'];
-
-        removeStudent($id);
-    }
-}
-
-// Display the form
-echo '<form method="post">';
-echo '<input type="hidden" name="action" value="add">';
-echo 'Name: <input type="text" name="name"><br>';
-echo 'Email: <input type="text" name="email"><br>';
-echo '<button type="submit" name="submit">Add student</button>';
-echo '</form>';
-
-// Display the list of students
-$sql = "SELECT * FROM student";
-$result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-    echo '<table>';
-    echo '<tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr>';
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo '<tr>';
-        echo '<td>' . $row['id'] . '</td>';
-        echo '<td>' . $row['name'] . '</td>';
-        echo '<td>' . $row['email'] . '</td>';
-        echo '<td>';
-        echo '<form method="post">';
-        echo '<input type="hidden" name="action" value="edit">';
-        echo '<input type="hidden" name="id" value="' . $row['id'] . '">';
-        echo '<input type="text" name="name" value="' . $row['name'] . '">';
-        echo '<input type="text" name="email" value="' . $row['email'] . '">';
-        echo '<button type="submit" name="submit">Save</button>';
-        echo '</form>';
-        echo '<form method="post">';
-        echo '<input type="hidden" name="action" value="remove">';
-        echo '<input type="hidden" name="id" value="' . $row['id'] . '">';
-        echo '<button type="submit" name="submit">Remove</button>';
-        echo '</form>';
-        echo '</td>';
-        echo '</tr>';
-    }
-
-    echo '</table>';
-} else {
-    echo "0 results";
-}
-
-// Close the database connection
-mysqli_close($conn);
-?>
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">Class</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="../home.php">Home</a>
+            </li>
+            <?php            
+            session_start();                       
+            if ($_SESSION['role']=="teacher") {
+                echo '<li class="nav-item">
+                        <a type="button" class="btn btn-primary nav-link active" href="create.php">Add New</a>
+                    </li>';
+            }           
+            ?>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container my-4">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>EMAIL</th>
+        <th>PHONE</th>
+        <?php            
+            echo $_SESSION['role'];                       
+            if ($_SESSION['role']=="teacher") {
+                echo '<th>ACTIONS</th>';
+            }           
+        ?>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+        include "../config.php";
+        $sql = "select * from student";
+        $result = $conn->query($sql);
+        if(!$result){
+          die("Invalid query!");
+        }
+        if ($_SESSION['role']=="teacher") {
+            
+            while ($row = $result->fetch_assoc()) {
+              echo "
+            <tr>
+            <th>$row[id]</th>
+            <td>$row[name]</td>
+            <td>$row[email]</td>
+            <td>$row[phonenumber]</td>
+            <td>
+                <a class='btn btn-success' href='edit.php?id=$row[id]'>Edit</a>
+                <a class='btn btn-danger' href='delete.php?id=$row[id]'>Delete</a>
+            </td>
+            </tr>
+            ";
+          }
+      } else {
+          while($row=$result->fetch_assoc()){
+            echo "
+            <tr>
+            <th>$row[id]</th>
+            <td>$row[name]</td>
+            <td>$row[email]</td>
+            <td>$row[phonenumber]</td>
+            </tr>
+            ";
+        }
+      }
+      ?>
+    </tbody>
+  </table>
+      </div>
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>
