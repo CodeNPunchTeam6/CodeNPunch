@@ -27,7 +27,7 @@ if (isset($_POST['register'])) {
     $new_id = $row['max_id'] + 1;
 
     //check username are taken or not
-    $sql = "SELECT * FROM data WHERE username='$username'";
+    $sql = "SELECT * FROM login WHERE username='$username'";
     $result = $mysqli->query($sql);
     if (mysqli_num_rows($result) > 0) {
         echo "Username is taken.";
@@ -70,7 +70,7 @@ if (isset($_POST['register'])) {
     //check valid email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         //invalid email
-        echo '<script> window.location.href = "register.php";alert("Failed, invalid Email!!")</script>';
+        echo 'Invalid email';
         $mysqli->close();
         exit();
     }
@@ -78,13 +78,15 @@ if (isset($_POST['register'])) {
 
     
     //insert into student table if role = 0
-    if ($role == 0) {
-        $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
+    if ($role == "student") {
+        $sql = "INSERT INTO login (username, password, role) VALUES ('$username', '$password', '$role')";
         $mysqli->query($sql);
         $sql = "INSERT INTO student (id, name, email, phonenumber) VALUES ('$new_id', '$fullname', '$email', '$phonenumber')";
     } else {
         // Insert user info into database
-        $sql = "INSERT INTO data (username, password, fullname, email, phonenumber, role) VALUES ('$username', '$password', '$fullname', '$email', '$phonenumber', '$role')";
+        $sql = "INSERT INTO login (username, password, role) VALUES ('$username', '$password', '$role')";
+        $mysqli->query($sql);
+        $sql = "INSERT INTO teacher (id, name, email, phonenumber) VALUES ('$new_id', '$fullname', '$email', '$phonenumber')";
     }
 
     if ($mysqli->query($sql) === TRUE) {

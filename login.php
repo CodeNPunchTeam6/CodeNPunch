@@ -25,7 +25,7 @@ if (isset($_POST['login'])) {
 
 
     // Check if user exists in database
-    $sql = "SELECT * FROM data WHERE username='$username'";
+    $sql = "SELECT * FROM login WHERE username='$username'";
     $result = $mysqli->query($sql);
 
     if ($result->num_rows == 1) {

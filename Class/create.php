@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    //check session
+    if ($_SESSION['role']=="student") {
+        header("location: index.php");
+        $mysqli->close();
+    }
     include "../config.php";
     if(isset($_POST['submit'])){
         $name = $conn->real_escape_string($_POST['name']);
