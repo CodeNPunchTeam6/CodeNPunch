@@ -1,19 +1,20 @@
 <?php
-//contents
-echo file_get_contents('../HTMLfile/cngiaovien.html');
-
-$target_dir = "baitap/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 $baitap = 'baitap';
 $trabai = 'trabai';
+$creatbutomm2 ='<form action="" method="post">
+<input type="submit" value="Download" name="taixuong">
+<input type="submit" value="Xem Bài Làm" name="xembl">
+</form>' ;
 
   if(isset($_POST["thembt"])){
     header("Location: giaobai.html");
   }
 
   if(isset($_POST["submit"])){
+    $target_dir = "baitap/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     // Kiểm Tra Xem File Đã Tồn Tại Hay Chưa
     if (file_exists($target_file)) {
       echo "Sorry, file already exists.";
@@ -40,6 +41,7 @@ $trabai = 'trabai';
     $files1 = array_slice(scandir($dir1), 2);
     foreach ($files1 as $value) {
       echo("<a href='$baitap\\$value'>$value</a>")."<br>";
+      echo $creatbutomm2;
       // echo ("$value")."<br>";
     }
   }
@@ -50,6 +52,7 @@ $trabai = 'trabai';
       echo("<a href='$trabai\\$value'>$value</a>")."<br>";
       // echo ("$value")."<br>";
     }
-  }  
+  }
+    
 ?>
 

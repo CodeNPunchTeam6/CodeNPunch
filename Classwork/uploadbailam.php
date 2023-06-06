@@ -1,13 +1,10 @@
 <?php
-//html contents
-echo file_get_contents('../HTMLfile/trabai.html');
-
-  $target_dir = "trabai/";
-  $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-  $uploadOk = 1;
-  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
   $baitap = 'baitap';
+  $creatbutomm1 = '<form action="" method="post">
+  <input type="submit" value="Làm Bài" name="lambai">
+  </form>' ;
   
+  // tải file lên
   if(isset($_POST["submit"])){
       // Kiểm Tra Xem File Đã Tồn Tại Hay Chưa
     if (file_exists($target_file)) {
@@ -20,21 +17,30 @@ echo file_get_contents('../HTMLfile/trabai.html');
       echo "Sorry, your file was not uploaded.";
     // Ngược Lại Thì Cho Tải Lên
     } else {
-      if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+      if (move_uploaded_file($_FILES["Upload"]["tmp_name"], $target_file)) {
+        echo "The file ". htmlspecialchars( basename( $_FILES["Upload"]["name"])). " has been uploaded.";
       } else {
         echo "Sorry, there was an error uploading your file.";
       }
     }
   }
-
+  // In tất cả các file có trong folder  
   if(isset($_POST["xembt"])){
-    // In tất cả các file có trong folder  
-    $dir = 'D:\CodeandPunch\prj\baitap';
-    $files1 = array_slice(scandir($dir), 2);
-    foreach ($files1 as $value) {
-      echo("<a href='$baitap\\$value'>$value</a>")."<br>";
-       // echo ("$value")."<br>";
-    }
+			$files = glob("baitap/*.*");
+			foreach ($files as $file) {
+				echo "<li><a href='download.php?file=$file'>" . basename($file) . "</a></li>";
+        echo $creatbutomm1 ;
+			}
+    // $dir = 'D:\CodeandPunch\prj\baitap';
+    // $files1 = array_slice(scandir($dir), 2);
+    // foreach ($files1 as $value) {
+    //   echo("<a href='$baitap\\$value'>$value</a>")."<br>";
+    //   echo $creatbutomm1 ;
+    //   echo ("$value")."<br>";
+    // }
   }
+  if(isset($_POST["lambai"])){
+    header("Location: trabai.html");
+  }
+  
 ?>
